@@ -9,7 +9,7 @@ router.get('/status', async (req, res) => {
 
   try {
     // Tìm trạng thái theo Status_ID
-    const status = await DeliveryStatus.findOne({ Status_ID: id });
+    const status = await DeliveryStatus.find();
 
     if (!status) {
       return res.status(404).json({ error: 'Trạng thái không tồn tại' });
