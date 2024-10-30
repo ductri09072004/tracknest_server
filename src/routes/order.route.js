@@ -10,7 +10,7 @@ router.get('/order', async (req, res) => {
 
   try {
     // Lọc đơn hàng theo Status nếu status được cung cấp
-    const orders = await Order.find(status ? { Status_ID: status } : {});  
+    const orders = await Order.find(status ? { orderStatusId: status } : {});  
     res.json(orders);
   } catch (error) {
     console.error('Lỗi khi lấy dữ liệu:', error);
@@ -22,7 +22,7 @@ router.get('/ordersearch', async (req, res) => {
   const { orderID } = req.query; 
 
   try {
-    const orders = await Order.find(orderID ? { Order_ID: orderID } : {});  
+    const orders = await Order.find(orderID ? { orderId: orderID } : {});  
     res.json(orders);
   } catch (error) {
     console.error('Lỗi khi lấy dữ liệu:', error);
@@ -33,47 +33,48 @@ router.get('/ordersearch', async (req, res) => {
 router.post('/order', async (req, res) => {
   try {
     const {
-      Order_ID,
-      Cus_ID,
-      Sender_Address,
-      Receiver_Phone,
-      Receiver_Name,
-      Receiver_Address,
-      Order_Type,
-      Order_Fragile,
-      Order_Note,
-      Order_COD,
-      Services_ID,
-      Order_TotalPrice,
-      Payment_ID,
-      Status_ID,
-      Driver_ID,  
-      Order_Date,
-      Delivery_Fee,
-      Proof_Success,
-      Order_Reason
+      orderId,
+      cusId,
+      senderAddress,
+      receiverPhone,
+      receiverName,
+      receiverAddress,
+      orderType,
+      orderIsFragile,
+      orderNote,
+      orderCOD,
+      dservicesId,
+      totalPrice,
+      paymentId,
+      orderStatusId,
+      driverId,
+      createdDate,
+      deliverPrice,
+      proofSuccess,
+      reasonFailed,
+
     } = req.body;
 
     const newOrder = new Order({
-      Order_ID,
-      Cus_ID,
-      Sender_Address,
-      Receiver_Phone,
-      Receiver_Name,
-      Receiver_Address,
-      Order_Type,
-      Order_Fragile,
-      Order_Note,
-      Order_COD,
-      Services_ID,
-      Order_TotalPrice,
-      Payment_ID,
-      Status_ID,
-      Driver_ID,  
-      Order_Date,
-      Delivery_Fee,
-      Proof_Success,
-      Order_Reason
+      orderId,
+      cusId,
+      senderAddress,
+      receiverPhone,
+      receiverName,
+      receiverAddress,
+      orderType,
+      orderIsFragile,
+      orderNote,
+      orderCOD,
+      dservicesId,
+      totalPrice,
+      paymentId,
+      orderStatusId,
+      driverId,
+      createdDate,
+      deliverPrice,
+      proofSuccess,
+      reasonFailed,
     });
 
     await newOrder.save();
@@ -87,7 +88,7 @@ router.post('/order', async (req, res) => {
 router.put('/order/:id', async (req, res) => {
   try {
     const { id } = req.params; // Lấy mã đơn hàng từ URL
-    const { Status_ID } = req.body; // Nhận Status_ID từ body
+    const { orderStatusId } = req.body; // Nhận Status_ID từ body
 
     if (!id) {
       return res.status(400).json({ error: 'Thiếu mã đơn hàng.' });
@@ -95,8 +96,8 @@ router.put('/order/:id', async (req, res) => {
 
     // Tìm và cập nhật đơn hàng theo Order_ID
     const updatedOrder = await Order.findOneAndUpdate(
-      { Order_ID: id }, 
-      { Status_ID }, 
+      { orderId: id }, 
+      { orderStatusId }, 
       { new: true } // Trả về đơn hàng đã được cập nhật
     );
 

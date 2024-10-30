@@ -5,7 +5,7 @@ const router = express.Router();
 router.use(express.json());
 
 router.get('/status', async (req, res) => {
-  const { id } = req.query; // Lấy Status_ID từ query
+  // const { id } = req.query; // Lấy Status_ID từ query
 
   try {
     // Tìm trạng thái theo Status_ID

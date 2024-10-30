@@ -8,7 +8,7 @@ router.get('/cus', async (req, res) => {
   const { id } = req.query; // Lấy Status_ID từ query
 
   try {
-    const status = await Cus.findOne({ cus_ID: id });
+    const status = await Cus.findOne({ cusId: id });
 
     if (!status) {
       return res.status(404).json({ error: 'Trạng thái không tồn tại' });

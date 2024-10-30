@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 // Định nghĩa schema cho DeliveryStatus
 const statusSchema = new mongoose.Schema(
   {
-    Status_ID: { type: String, required: true, unique: true },
-    Status_Name: { type: String, required: true },
+    statusId: { type: String, required: true, unique: true },
+    statusName: { type: String, required: true },
   },
   { collection: 'DeliveryStatus' } // Đảm bảo dùng đúng collection trong MongoDB
 );

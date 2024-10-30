@@ -2,13 +2,13 @@ const mongoose = require('mongoose');
 
 const statusSchema = new mongoose.Schema(
   {
-    cus_ID: { type: String, required: true, unique: true },
-    cus_Name: { type: String, required: true, },
-    cus_Email: { type: String, required: true },
-    cus_Phone: { type: String, required: true },
-    cus_Address: { type: String, required: true },
-    cus_Birthday: { type: String, required: true,},
-    cus_Gender: { type: Number, required: true },
+    cusId: { type: String, required: true, unique: true },
+    cusName: { type: String, required: true, },
+    cusEmail: { type: String, required: true },
+    cusPhone: { type: String, required: true },
+    cusAddress: { type: String, required: true },
+    cusBirthday: { type: String, required: true,},
+    cusGender: { type: Number, required: true },
   },
   { collection: 'Customer' } 
 );

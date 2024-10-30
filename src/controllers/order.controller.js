@@ -1,45 +1,26 @@
 const mongoose = require('mongoose');
 
 const questionSchema = new mongoose.Schema({
-  // Order_ID: { type: String, required: true, unique: true }, //khóa chính
-  // Cus_ID: { type: String, required: true},
-  // Sender_Address: { type: String, required: true },
-  // Receiver_Phone: { type: Number, required: true },
-  // Receiver_Name: { type: String, required: true },
-  // Receiver_Address: { type: String, required: true },
-  // Order_Type: { type: String, required: true },
-  // Order_Fragile: { type: Boolean, required: true}, // hàng dễ vỡ
-  // Order_Note: { type: String},
-  // Order_COD: { type: Number},
-  // Services_ID: { type: String, required: true },
-  // Order_TotalPrice: { type: Number, required: true },
-  // Payment_ID: { type: String},
-  // Status_ID: { type: String, required: true },
-  // Driver_ID: { type: String},
-  // Order_Date: { type: String, required: true },
-  // Delivery_Fee: { type: Number, required: true },
-  // Proof_Success: { type: String},
-  // Order_Reason: { type: String},
 
-  Order_ID: { type: String, required: true, unique: true }, // Khóa chính
-  Cus_ID: { type: String }, // Không còn required
-  Sender_Address: { type: String },
-  Receiver_Phone: { type: String },
-  Receiver_Name: { type: String },
-  Receiver_Address: { type: String },
-  Order_Type: { type: String },
-  Order_Fragile: { type: Boolean }, // Không còn required
-  Order_Note: { type: String, default: null }, // Có thể để trống
-  Order_COD: { type: Number }, // Mặc định là 0 nếu không có giá trị
-  Services_ID: { type: String },
-  Order_TotalPrice: { type: Number, default: 0 }, // Giá trị mặc định
-  Payment_ID: { type: String, default: null },
-  Status_ID: { type: String },
-  Driver_ID: { type: String, default: null },
-  Order_Date: { type: String },
-  Delivery_Fee: { type: Number, default: 0 },
-  Proof_Success: { type: String, default: null },
-  Order_Reason: { type: String, default: null }
+  orderId: { type: String, required: true, unique: true }, // Khóa chính
+  cusId: { type: String }, // Không còn required
+  senderAddress: { type: String },
+  receiverPhone: { type: String },
+  receiverName: { type: String },
+  receiverAddress: { type: String },
+  orderType: { type: String },
+  orderIsFragile: { type: Boolean }, // Không còn required
+  orderNote: { type: String, default: null }, // Có thể để trống
+  orderCOD: { type: Number }, // Mặc định là 0 nếu không có giá trị
+  dservicesId: { type: String },
+  totalPrice: { type: Number, default: 0 }, // Giá trị mặc định
+  paymentId: { type: String, default: null },
+  orderStatusId: { type: String },
+  driverId: { type: String, default: null },
+  createdDate: { type: Date },
+  deliverPrice: { type: Number, default: 0 },
+  proofSuccess: { type: String, default: null },
+  reasonFailed: { type: String, default: null }
 
 }, { collection: 'Order' });
 
