@@ -9,7 +9,6 @@ router.get('/item', async (req, res) => {
   const { status } = req.query; 
 
   try {
-    // Lọc đơn hàng theo Status nếu status được cung cấp
     const orders = await Item.find(status ? { Order_ID: status } : {});  
     res.json(orders);
   } catch (error) {

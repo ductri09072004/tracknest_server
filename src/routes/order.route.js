@@ -6,17 +6,21 @@ const router = express.Router();
 router.use(express.json()); 
 
 router.get('/order', async (req, res) => {
-  const { status } = req.query; 
-
+  const { status, cusId } = req.query;
   try {
-    // Lọc đơn hàng theo Status nếu status được cung cấp
-    const orders = await Order.find(status ? { orderStatusId: status } : {});  
+    const filter = {
+      ...(status && { orderStatusId: status }),
+      ...(cusId && { 'email.cusId': cusId }),
+    };
+
+    const orders = await Order.find(filter);
     res.json(orders);
   } catch (error) {
     console.error('Lỗi khi lấy dữ liệu:', error);
     res.status(500).json({ error: 'Lỗi khi lấy dữ liệu' });
   }
 });
+
 
 router.get('/ordersearch', async (req, res) => {
   const { orderID } = req.query; 

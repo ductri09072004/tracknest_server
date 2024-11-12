@@ -68,5 +68,51 @@ router.post('/cusE', async (req, res) => {
   }
 });
 
+router.get('/cusE2', async (req, res) => {
+  const { email } = req.query;
+
+  if (!email) {
+    return res.status(400).json({ error: 'Email không được để trống' });
+  }
+
+  try {
+    const customer = await Cus.findOne({ cusEmail: email });
+
+    if (customer) {
+      return res.status(200).json({ exists: true, customer }); // Trả về dữ liệu khách hàng nếu email tồn tại
+    } else {
+      return res.status(404).json({ exists: false, message: 'Email không tồn tại trong hệ thống' });
+    }
+  } catch (error) {
+    console.error('Lỗi khi lấy dữ liệu:', error);
+    res.status(500).json({ error: 'Lỗi khi lấy dữ liệu' });
+  }
+});
+
+//cap nhat info cus
+router.put('/cusA/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { cusName, cusPhone, cusAddress, cusGender } = req.body;
+
+    if (!id) {
+      return res.status(400).json({ error: 'Thiếu ID của người dùng.' });
+    }
+
+    // Tìm và cập nhật người dùng theo id
+    const updatedUser = await Cus.findByIdAndUpdate(id, { cusName, cusPhone, cusAddress, cusGender }, { new: true });
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'Không tìm thấy người dùng.' });
+    }
+
+    res.json(updatedUser);
+  } catch (error) {
+    console.error('Lỗi khi cập nhật người dùng:', error);
+    res.status(500).json({ error: 'Lỗi khi cập nhật người dùng.' });
+  }
+});
+
+
 
 module.exports = router;
