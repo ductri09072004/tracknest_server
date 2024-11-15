@@ -23,10 +23,15 @@ router.get('/order', async (req, res) => {
 
 
 router.get('/ordersearch', async (req, res) => {
-  const { orderID } = req.query; 
+  const { orderID, cusId } = req.query;
 
   try {
-    const orders = await Order.find(orderID ? { orderId: orderID } : {});  
+    // Tạo object lọc theo điều kiện `orderID` và `cus.cusId`
+    const filter = {};
+    if (orderID) filter.orderId = orderID;
+    if (cusId) filter.cusId = cusId;
+
+    const orders = await Order.find(filter);
     res.json(orders);
   } catch (error) {
     console.error('Lỗi khi lấy dữ liệu:', error);

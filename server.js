@@ -7,6 +7,7 @@ const Cus = require('./src/routes/cus.route.js')
 const Service = require('./src/routes/service.route.js')
 const Payment = require('./src/routes/payment.route.js')
 const Request = require('./src/routes/request.route.js')
+const Nofi = require('./src/routes/nofi.route.js')
 // const Auth = require('./src/routes/auth.route.js')
 
 const connectDB = require('./src/data/db.mongo.config.js');
@@ -28,6 +29,7 @@ app.use('/api', Cus);
 app.use('/api', Service);
 app.use('/api', Payment);
 app.use('/api', Request);
+app.use('/api', Nofi);
 // app.use('/api', Auth);
 
 app.listen(port, () => {
