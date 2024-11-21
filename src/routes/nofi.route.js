@@ -31,7 +31,7 @@ router.get('/NofiS', async (req, res) => {
 router.post('/Nofi', async (req, res) => {
     try {
         const {
-            nofiId,
+            nofiId,           
             nofiTitle,
             nofiContent,
             nofiType,
