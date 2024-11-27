@@ -20,8 +20,9 @@ const questionSchema = new mongoose.Schema({
   createdDate: { type: Date },
   deliverPrice: { type: Number, default: 0 },
   proofSuccess: { type: String, default: null },
-  reasonFailed: { type: String, default: null }
-
+  reasonFailed: { type: String, default: null },
+  statusWallet: { type: String, default: null },
+  idWallet: { type: String, default: null },
 }, { collection: 'Order' });
 
 const Order = mongoose.model('Order', questionSchema);

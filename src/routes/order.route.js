@@ -61,6 +61,8 @@ router.post('/order', async (req, res) => {
       deliverPrice,
       proofSuccess,
       reasonFailed,
+      statusWallet,
+      idWallet
 
     } = req.body;
 
@@ -84,6 +86,8 @@ router.post('/order', async (req, res) => {
       deliverPrice,
       proofSuccess,
       reasonFailed,
+      statusWallet,
+      idWallet
     });
 
     await newOrder.save();
@@ -108,6 +112,60 @@ router.put('/order/:id', async (req, res) => {
       { orderId: id }, 
       { orderStatusId }, 
       { new: true } // Trả về đơn hàng đã được cập nhật
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({ error: 'Không tìm thấy đơn hàng.' });
+    }
+
+    res.json(updatedOrder);
+  } catch (error) {
+    console.error('Lỗi khi cập nhật đơn hàng:', error);
+    res.status(500).json({ error: 'Lỗi khi cập nhật đơn hàng.' });
+  }
+});
+
+router.put('/orderW/:id', async (req, res) => {
+  try {
+    const { id } = req.params; // Lấy mã đơn hàng từ URL
+    const { statusWallet, idWallet, totalPrice} = req.body; // Nhận Status_ID từ body
+
+    if (!id) {
+      return res.status(400).json({ error: 'Thiếu mã đơn hàng.' });
+    }
+
+    // Tìm và cập nhật đơn hàng theo Order_ID
+    const updatedOrder = await Order.findOneAndUpdate(
+      { orderId: id }, 
+      { statusWallet, idWallet, totalPrice}, 
+      { new: true } 
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({ error: 'Không tìm thấy đơn hàng.' });
+    }
+
+    res.json(updatedOrder);
+  } catch (error) {
+    console.error('Lỗi khi cập nhật đơn hàng:', error);
+    res.status(500).json({ error: 'Lỗi khi cập nhật đơn hàng.' });
+  }
+});
+
+router.put('/orderK/:id', async (req, res) => {
+  try {
+    const { id } = req.params; // Lấy mã đơn hàng từ URL
+    const { statusWallet} = req.body; // Nhận Status_ID từ body
+
+    if (!id) {
+      return res.status(400).json({ error: 'Thiếu mã đơn hàng.' });
+    }
+
+    // Tìm và cập nhật đơn hàng theo Order_ID
+    const updatedOrder = await Order.findOneAndUpdate(
+      { orderId: id }, 
+      { statusWallet}, 
+      { new: true } 
     );
 
     if (!updatedOrder) {
