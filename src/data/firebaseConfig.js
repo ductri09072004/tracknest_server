@@ -19,6 +19,6 @@ admin.initializeApp({
   databaseURL: process.env.FIREBASE_DATABASE_URL,
 });
 
-const database = admin.database(); // Lấy database từ Firebase Admin SDK
+const database = admin.database(); 
 
 export { admin, database };
