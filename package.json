@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "test": "concurrently --kill-others-on-fail --prefix none npm:test:*",
+    "test": "jest --watchAll",
     "test:sw": "node --import ./test/setup.sw.mjs --test './src/sw/**/*.spec.*'",
     "test:units": "node --import ./test/setup.units.mjs --test './src/app/**/*.spec.*'",
     "test:ui": "node --import ./test/setup.ui.mjs --test './src/app/**/*.test.*'"
@@ -26,7 +26,9 @@
     "nodemon": "^3.1.7"
   },
   "devDependencies": {
-    "concurrently": "^9.1.2"
+    "@types/jest": "^29.5.14",
+    "concurrently": "^9.1.2",
+    "jest": "^29.7.0"
   },
   "repository": {
     "type": "git",
