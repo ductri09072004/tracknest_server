@@ -1,9 +1,9 @@
 import express from "express";
-import { getRequests } from "../controllers/Transactions.controller.js";
+import { addRequest, getRequests } from "../controllers/Transactions.controller.js";
 
 const router = express.Router();
 
 router.get("/transactions", getRequests);
+router.post("/transactions", addRequest);
 
-// Xuất theo chuẩn ES Module
 export default router;
