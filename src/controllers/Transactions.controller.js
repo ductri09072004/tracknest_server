@@ -31,7 +31,7 @@ export const addRequest = async (req, res) => {
       type,
       user_id } = req.body;
 
-    if (!cate_id || !date || !money || !note || !pic|| !tofrom|| !trans_id|| !type|| !user_id) {
+    if (!cate_id || !date || !money|| !pic|| !trans_id|| !type|| !user_id) {
       return res.status(400).json({ error: "Thiếu thông tin giao dịch" });
     }
 
