@@ -3,7 +3,7 @@ import { getRequests } from "../controllers/ExtractBill.controller.js";
 
 const router = express.Router();
 
-router.get("/extractbill", getRequests);
+router.get("/extractbills", getRequests);
 
 // Xuất theo chuẩn ES Module
 export default router;
