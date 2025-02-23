@@ -20,7 +20,8 @@ jobs:
         username: ${{ secrets.AWS_USER }}
         key: ${{ secrets.AWS_SSH_KEY }}
         script: |
-          cd tracknest_server  # Thay đổi đường dẫn nếu cần
+          cd tracknest_server 
+          git reset --hard origin/main
           git pull origin main
-          npm install  # Nếu dùng Node.js
-          pm2 restart all  # Restart server với PM2
+          npm install 
+          pm2 restart all 
