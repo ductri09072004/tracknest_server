@@ -3,7 +3,7 @@ import { database } from "../data/firebaseConfig.js";
 // Lấy danh sách tất cả requests từ Firebase
 export const getRequests = async (req, res) => {
   try {
-    const requestRef = database.ref("Account");
+    const requestRef = database.ref("MemPay");
     const snapshot = await requestRef.once("value");
 
     if (!snapshot.exists()) {
@@ -21,21 +21,21 @@ export const getRequests = async (req, res) => {
 export const addRequest = async (req, res) => {
   try {
     const { 
-      date_buy,
-      email,
-      type_id,
-      user_id } = req.body;
+      money_pay,
+      name_pay,
+      pay_id,
+      pay_main } = req.body;
 
-    if ( !date_buy|| !email|| !type_id|| !user_id) {
+    if ( !money_pay|| !name_pay|| !pay_id|| !pay_main) {
       return res.status(400).json({ error: "Thiếu thông tin giao dịch" });
     }
 
-    const requestRef = database.ref("Account").push();
+    const requestRef = database.ref("MemPay").push();
     await requestRef.set({
-        date_buy,
-        email,
-        type_id,
-        user_id 
+       money_pay,
+       name_pay,
+       pay_id,
+       pay_main
     });
 
     res.status(201).json({ message: "Giao dịch đã được thêm", id: requestRef.key });
@@ -53,7 +53,7 @@ export const deleteRequest = async (req, res) => {
       return res.status(400).json({ error: "Thiếu ID danh mục" });
     }
 
-    const requestRef = database.ref(`Account/${id}`);
+    const requestRef = database.ref(`MemPay/${id}`);
     const snapshot = await requestRef.once("value");
 
     if (!snapshot.exists()) {
@@ -78,7 +78,7 @@ export const updateRequest = async (req, res) => {
         return res.status(400).json({ error: "Thiếu ID giao dịch" });
       }
   
-      const requestRef = database.ref(`Account/${id}`);
+      const requestRef = database.ref(`MemPay/${id}`);
       const snapshot = await requestRef.once("value");
   
       if (!snapshot.exists()) {
@@ -92,4 +92,3 @@ export const updateRequest = async (req, res) => {
       res.status(500).json({ error: "Lỗi khi cập nhật giao dịch" });
     }
   };
-  
