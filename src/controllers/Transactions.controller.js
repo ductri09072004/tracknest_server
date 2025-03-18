@@ -29,10 +29,26 @@ export const addRequest = async (req, res) => {
       tofrom,
       trans_id,
       type,
-      user_id } = req.body;
+      user_id 
+    } = req.body;
 
-    if (!cate_id || !date || !money|| !trans_id|| !type|| !user_id) {
-      return res.status(400).json({ error: "Thiếu thông tin giao dịch" });
+    // Kiểm tra thiếu dữ liệu
+    if (!cate_id || !date || !money || !trans_id || !type || !user_id) {
+      return res.status(400).json({ success: false, message: "Thiếu thông tin giao dịch" });
+    }
+
+    // Kiểm tra nếu số tiền không hợp lệ (0 hoặc âm)
+    if (money <= 0) {
+      return res.status(400).json({ success: false, message: "Số tiền phải lớn hơn 0" });
+    }
+
+    // Kiểm tra ngày giao dịch không được ở tương lai
+    const today = new Date();
+    const transactionDate = new Date(date);
+    today.setHours(0, 0, 0, 0); // Xóa giờ để so sánh chính xác theo ngày
+
+    if (transactionDate > today) {
+      return res.status(400).json({ success: false, message: "Không thể chọn ngày trong tương lai" });
     }
 
     const requestRef = database.ref("Transactions").push();
@@ -48,10 +64,10 @@ export const addRequest = async (req, res) => {
       user_id
     });
 
-    res.status(201).json({ message: "Giao dịch đã được thêm", id: requestRef.key });
+    res.status(201).json({ success: true, message: "Giao dịch đã được thêm", id: requestRef.key });
   } catch (error) {
     console.error("Lỗi khi thêm giao dịch:", error);
-    res.status(500).json({ error: "Lỗi khi thêm giao dịch" });
+    res.status(500).json({ success: false, message: "Lỗi khi thêm giao dịch" });
   }
 };
 
