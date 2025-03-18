@@ -20,23 +20,16 @@ export const getRequests = async (req, res) => {
 // thêm danh sách
 export const addRequest = async (req, res) => {
   try {
-    const { 
-      icon,
-      name,
-      type,
-      user_id } = req.body;
+    const { icon, name, type, user_id } = req.body;
 
-    if ( !icon|| !name|| !type|| !user_id) {
-      return res.status(400).json({ error: "Thiếu thông tin giao dịch" });
-    }
+    // Kiểm tra dữ liệu đầu vào
+    if (!user_id) return res.status(400).json({ error: "Không tìm thấy UUID!" });
+    if (!icon || !name) return res.status(400).json({ error: "Vui lòng nhập đầy đủ thông tin!" });
+    if (icon.length > 2) return res.status(400).json({ error: "Icon chỉ được có 1 ký tự!" });
 
+    // Thêm vào database
     const requestRef = database.ref("Categories").push();
-    await requestRef.set({
-      icon,
-      name,
-      type,
-      user_id
-    });
+    await requestRef.set({ icon, name, type, user_id });
 
     res.status(201).json({ message: "Giao dịch đã được thêm", id: requestRef.key });
   } catch (error) {
@@ -44,6 +37,7 @@ export const addRequest = async (req, res) => {
     res.status(500).json({ error: "Lỗi khi thêm giao dịch" });
   }
 };
+
 
 // xóa danh sách
 export const deleteRequest = async (req, res) => {
