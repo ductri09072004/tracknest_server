@@ -73,17 +73,21 @@ export const getRequestsbalence = async (req, res) => {
       }
     });
 
+    const balance = totalIncome - totalExpense;
+
     // Trả về kết quả đã xử lý
     res.json({
       userId,
       expense: totalExpense,
-      income: totalIncome
+      income: totalIncome,
+      balance: balance
     });
   } catch (error) {
     console.error("Lỗi khi lấy dữ liệu:", error);
     res.status(500).json({ error: "Lỗi khi lấy dữ liệu" });
   }
 };
+
 
 // Thêm giao dịch vào database
 export const addRequest = async (req, res) => {
