@@ -17,6 +17,31 @@ export const getRequests = async (req, res) => {
   }
 };
 
+export const getRequestsbyidandtype = async (req, res) => {
+  try {
+    const { user_id, tabType } = req.query; // Nhận tham số từ request query
+    const requestRef = database.ref("Transactions");
+    const snapshot = await requestRef.once("value");
+
+    if (!snapshot.exists()) {
+      return res.status(404).json({ error: "Không có dữ liệu" });
+    }
+
+    const allTransactions = Object.values(snapshot.val());
+
+    // Lọc dữ liệu theo `user_id` và `tabType`
+    const filteredTransactions = allTransactions.filter(transaction => 
+      transaction.user_id === user_id && transaction.type === tabType
+    );
+
+    res.json(filteredTransactions);
+  } catch (error) {
+    console.error("Lỗi khi lấy dữ liệu:", error);
+    res.status(500).json({ error: "Lỗi khi lấy dữ liệu" });
+  }
+};
+
+
 // Thêm giao dịch vào database
 export const addRequest = async (req, res) => {
   try {
