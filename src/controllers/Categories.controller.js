@@ -17,6 +17,31 @@ export const getRequests = async (req, res) => {
   }
 };
 
+export const getRequestsFilter = async (req, res) => {
+  try {
+    const { user_id, type } = req.query; // Nhận tham số lọc từ query string
+    const requestRef = database.ref("Categories");
+    const snapshot = await requestRef.once("value");
+
+    if (!snapshot.exists()) {
+      return res.status(404).json({ error: "Không có dữ liệu" });
+    }
+
+    const data = snapshot.val();
+    
+    const filteredCategories = Object.values(data).filter(category => 
+      (!user_id || category.user_id === user_id) &&
+      (!type || category.type === type)
+    );
+
+    res.json(filteredCategories);
+  } catch (error) {
+    console.error("Lỗi khi lấy dữ liệu:", error);
+    res.status(500).json({ error: "Lỗi khi lấy dữ liệu" });
+  }
+};
+
+
 // thêm danh sách
 export const addRequest = async (req, res) => {
   try {
