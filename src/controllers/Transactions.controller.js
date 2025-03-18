@@ -33,7 +33,7 @@ export const addRequest = async (req, res) => {
     } = req.body;
 
     // Kiểm tra thiếu dữ liệu
-    if (!cate_id || !date || !money || !trans_id || !type || !user_id) {
+    if (!cate_id || !date || !trans_id || !type || !user_id) {
       return res.status(400).json({ success: false, message: "Thiếu thông tin giao dịch" });
     }
 
@@ -44,12 +44,16 @@ export const addRequest = async (req, res) => {
 
     // Kiểm tra ngày giao dịch không được ở tương lai
     const today = new Date();
-    const transactionDate = new Date(date);
+    const [day, month, year] = date.split('/').map(Number); // Tách ngày, tháng, năm từ chuỗi
+    const transactionDate = new Date(year, month - 1, day); // Lưu ý: tháng trong JS tính từ 0
+    
     today.setHours(0, 0, 0, 0); // Xóa giờ để so sánh chính xác theo ngày
-
+    transactionDate.setHours(0, 0, 0, 0);
+    
     if (transactionDate > today) {
       return res.status(400).json({ success: false, message: "Không thể chọn ngày trong tương lai" });
     }
+    
 
     const requestRef = database.ref("Transactions").push();
     await requestRef.set({
