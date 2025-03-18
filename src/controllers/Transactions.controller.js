@@ -41,6 +41,49 @@ export const getRequestsbyidandtype = async (req, res) => {
   }
 };
 
+export const getRequestsbalence = async (req, res) => {
+  try {
+    const { userId } = req.query; // Nhận userId từ query string
+    if (!userId) {
+      return res.status(400).json({ error: "Thiếu userId" });
+    }
+
+    const requestRef = database.ref("Transactions");
+    const snapshot = await requestRef.once("value");
+
+    if (!snapshot.exists()) {
+      return res.status(404).json({ error: "Không có dữ liệu" });
+    }
+
+    const transactions = Object.values(snapshot.val());
+
+    // Lọc giao dịch theo userId
+    const userTransactions = transactions.filter(t => t.user_id === userId);
+
+    // Tính tổng thu nhập và chi tiêu
+    let totalExpense = 0;
+    let totalIncome = 0;
+
+    userTransactions.forEach(transaction => {
+      const amount = parseInt(transaction.money) || 0;
+      if (transaction.type === "expense") {
+        totalExpense += amount;
+      } else if (transaction.type === "income") {
+        totalIncome += amount;
+      }
+    });
+
+    // Trả về kết quả đã xử lý
+    res.json({
+      userId,
+      expense: totalExpense,
+      income: totalIncome
+    });
+  } catch (error) {
+    console.error("Lỗi khi lấy dữ liệu:", error);
+    res.status(500).json({ error: "Lỗi khi lấy dữ liệu" });
+  }
+};
 
 // Thêm giao dịch vào database
 export const addRequest = async (req, res) => {
