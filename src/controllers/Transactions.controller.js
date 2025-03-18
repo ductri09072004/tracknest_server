@@ -3,7 +3,7 @@ import { database } from "../data/firebaseConfig.js";
 // Lấy danh sách tất cả requests từ Firebase
 export const getRequests = async (req, res) => {
   try {
-    const requestRef = database.ref("Categories");
+    const requestRef = database.ref("Transactions");
     const snapshot = await requestRef.once("value");
 
     if (!snapshot.exists()) {
@@ -17,23 +17,33 @@ export const getRequests = async (req, res) => {
   }
 };
 
-// thêm danh sách
+// Thêm giao dịch vào database
 export const addRequest = async (req, res) => {
   try {
     const { 
-      icon,
-      name,
+      cate_id, 
+      date,
+      money,
+      note,
+      pic,
+      tofrom,
+      trans_id,
       type,
       user_id } = req.body;
 
-    if ( !icon|| !name|| !type|| !user_id) {
+    if (!cate_id || !date || !money|| !trans_id|| !type|| !user_id) {
       return res.status(400).json({ error: "Thiếu thông tin giao dịch" });
     }
 
-    const requestRef = database.ref("Categories").push();
+    const requestRef = database.ref("Transactions").push();
     await requestRef.set({
-      icon,
-      name,
+      cate_id, 
+      date,
+      money,
+      note,
+      pic,
+      tofrom,
+      trans_id,
       type,
       user_id
     });
@@ -45,7 +55,7 @@ export const addRequest = async (req, res) => {
   }
 };
 
-// xóa danh sách
+//xóa giao dịch
 export const deleteRequest = async (req, res) => {
   try {
     const { id } = req.params;
@@ -53,7 +63,7 @@ export const deleteRequest = async (req, res) => {
       return res.status(400).json({ error: "Thiếu ID danh mục" });
     }
 
-    const requestRef = database.ref(`Categories/${id}`);
+    const requestRef = database.ref(`Transactions/${id}`);
     const snapshot = await requestRef.once("value");
 
     if (!snapshot.exists()) {
@@ -68,3 +78,27 @@ export const deleteRequest = async (req, res) => {
   }
 };
 
+// Cập nhật giao dịch
+export const updateRequest = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedData = req.body;
+
+    if (!id) {
+      return res.status(400).json({ error: "Thiếu ID giao dịch" });
+    }
+
+    const requestRef = database.ref(`Transactions/${id}`);
+    const snapshot = await requestRef.once("value");
+
+    if (!snapshot.exists()) {
+      return res.status(404).json({ error: "Giao dịch không tồn tại" });
+    }
+
+    await requestRef.update(updatedData);
+    res.status(200).json({ message: "Giao dịch đã được cập nhật" });
+  } catch (error) {
+    console.error("Lỗi khi cập nhật giao dịch:", error);
+    res.status(500).json({ error: "Lỗi khi cập nhật giao dịch" });
+  }
+};
