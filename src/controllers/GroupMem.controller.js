@@ -1,94 +1,62 @@
-import { database } from "../data/firebaseConfig.js";
+import GroupMemService from "../services/GroupMem.service.js";
 
-// Lấy danh sách tất cả requests từ Firebase
-export const getRequests = async (req, res) => {
+export const getGroups = async (req, res) => {
   try {
-    const requestRef = database.ref("GroupMem");
-    const snapshot = await requestRef.once("value");
-
-    if (!snapshot.exists()) {
+    const groups = await GroupMemService.getAllGroups();
+    if (!groups || groups.length === 0) {
       return res.status(404).json({ error: "Không có dữ liệu" });
     }
-
-    res.json(snapshot.val());
+    res.json(groups);
   } catch (error) {
     console.error("Lỗi khi lấy dữ liệu:", error);
     res.status(500).json({ error: "Lỗi khi lấy dữ liệu" });
   }
 };
 
-// Thêm giao dịch vào database
-export const addRequest = async (req, res) => {
+export const addGroup = async (req, res) => {
   try {
-    const { 
-      name_group, 
-      name_mem,
-      user_id } = req.body;
+    const { name_group, name_mem, user_id } = req.body;
 
     if (!name_group || !name_mem || !user_id) {
-      return res.status(400).json({ error: "Thiếu thông tin giao dịch" });
+      return res.status(400).json({ error: "Thiếu thông tin nhóm" });
     }
 
-    const requestRef = database.ref("GroupMem").push();
-    await requestRef.set({
-      name_group, 
-      name_mem,
-      user_id
-    });
-
-    res.status(201).json({ message: "Giao dịch đã được thêm", id: requestRef.key });
+    const newGroup = await GroupMemService.createGroup({ name_group, name_mem, user_id });
+    res.status(201).json({ message: "Nhóm đã được thêm", id: newGroup.id });
   } catch (error) {
-    console.error("Lỗi khi thêm giao dịch:", error);
-    res.status(500).json({ error: "Lỗi khi thêm giao dịch" });
+    console.error("Lỗi khi thêm nhóm:", error);
+    res.status(500).json({ error: "Lỗi khi thêm nhóm" });
   }
 };
 
-//xóa giao dịch
-export const deleteRequest = async (req, res) => {
+export const deleteGroup = async (req, res) => {
   try {
     const { id } = req.params;
     if (!id) {
-      return res.status(400).json({ error: "Thiếu ID danh mục" });
+      return res.status(400).json({ error: "Thiếu ID nhóm" });
     }
 
-    const requestRef = database.ref(`GroupMem/${id}`);
-    const snapshot = await requestRef.once("value");
-
-    if (!snapshot.exists()) {
-      return res.status(404).json({ error: "Danh mục không tồn tại" });
-    }
-
-    await requestRef.remove();
-    res.status(200).json({ message: "Danh mục đã được xóa" });
+    const result = await GroupMemService.deleteGroup(id);
+    res.status(200).json(result);
   } catch (error) {
-    console.error("Lỗi khi xóa danh mục:", error);
-    res.status(500).json({ error: "Lỗi khi xóa danh mục" });
+    console.error("Lỗi khi xóa nhóm:", error);
+    res.status(500).json({ error: "Lỗi khi xóa nhóm" });
   }
 };
 
-// Cập nhật giao dịch
-export const updateRequest = async (req, res) => {
+export const updateGroup = async (req, res) => {
   try {
     const { id } = req.params;
     const updatedData = req.body;
 
     if (!id) {
-      return res.status(400).json({ error: "Thiếu ID giao dịch" });
+      return res.status(400).json({ error: "Thiếu ID nhóm" });
     }
 
-    const requestRef = database.ref(`GroupMem/${id}`);
-    const snapshot = await requestRef.once("value");
-
-    if (!snapshot.exists()) {
-      return res.status(404).json({ error: "Giao dịch không tồn tại" });
-    }
-
-    await requestRef.update(updatedData);
-    res.status(200).json({ message: "Giao dịch đã được cập nhật" });
+    const updatedGroup = await GroupMemService.updateGroup(id, updatedData);
+    res.status(200).json(updatedGroup);
   } catch (error) {
-    console.error("Lỗi khi cập nhật giao dịch:", error);
-    res.status(500).json({ error: "Lỗi khi cập nhật giao dịch" });
+    console.error("Lỗi khi cập nhật nhóm:", error);
+    res.status(500).json({ error: "Lỗi khi cập nhật nhóm" });
   }
 };
-
-

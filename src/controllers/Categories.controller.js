@@ -1,70 +1,45 @@
-import { database } from "../data/firebaseConfig.js";
+import CategoryService from "../services/Category.service.js";
 
-// Lấy danh sách tất cả requests từ Firebase
-export const getRequests = async (req, res) => {
+export const getCategories = async (req, res) => {
   try {
-    const requestRef = database.ref("Categories");
-    const snapshot = await requestRef.once("value");
-
-    if (!snapshot.exists()) {
+    const categories = await CategoryService.getAllCategories();
+    if (!categories || categories.length === 0) {
       return res.status(404).json({ error: "Không có dữ liệu" });
     }
-
-    res.json(snapshot.val());
+    res.json(categories);
   } catch (error) {
     console.error("Lỗi khi lấy dữ liệu:", error);
     res.status(500).json({ error: "Lỗi khi lấy dữ liệu" });
   }
 };
 
-// thêm danh sách
-export const addRequest = async (req, res) => {
+export const addCategory = async (req, res) => {
   try {
-    const { 
-      icon,
-      name,
-      type,
-      user_id } = req.body;
+    const { icon, name, type, user_id } = req.body;
 
-    if ( !icon|| !name|| !type|| !user_id) {
-      return res.status(400).json({ error: "Thiếu thông tin giao dịch" });
+    if (!icon || !name || !type || !user_id) {
+      return res.status(400).json({ error: "Thiếu thông tin danh mục" });
     }
 
-    const requestRef = database.ref("Categories").push();
-    await requestRef.set({
-      icon,
-      name,
-      type,
-      user_id
-    });
-
-    res.status(201).json({ message: "Giao dịch đã được thêm", id: requestRef.key });
+    const newCategory = await CategoryService.createCategory({ icon, name, type, user_id });
+    res.status(201).json({ message: "Danh mục đã được thêm", id: newCategory.id });
   } catch (error) {
-    console.error("Lỗi khi thêm giao dịch:", error);
-    res.status(500).json({ error: "Lỗi khi thêm giao dịch" });
+    console.error("Lỗi khi thêm danh mục:", error);
+    res.status(500).json({ error: "Lỗi khi thêm danh mục" });
   }
 };
 
-// xóa danh sách
-export const deleteRequest = async (req, res) => {
+export const deleteCategory = async (req, res) => {
   try {
     const { id } = req.params;
     if (!id) {
       return res.status(400).json({ error: "Thiếu ID danh mục" });
     }
 
-    const requestRef = database.ref(`Categories/${id}`);
-    const snapshot = await requestRef.once("value");
-
-    if (!snapshot.exists()) {
-      return res.status(404).json({ error: "Danh mục không tồn tại" });
-    }
-
-    await requestRef.remove();
-    res.status(200).json({ message: "Danh mục đã được xóa" });
+    const result = await CategoryService.deleteCategory(id);
+    res.status(200).json(result);
   } catch (error) {
     console.error("Lỗi khi xóa danh mục:", error);
     res.status(500).json({ error: "Lỗi khi xóa danh mục" });
   }
 };
-
