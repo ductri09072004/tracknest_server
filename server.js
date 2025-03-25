@@ -7,6 +7,7 @@ import grouptranRoutes from "./src/routes/GroupTrans.route.js";
 import transactionRoutes from "./src/routes/Transactions.route.js"; 
 import accountRoutes from "./src/routes/Account.route.js"; 
 import mempayRoutes from "./src/routes/Mempay.route.js"; 
+import languageRoutes from "./src/routes/Language.route.js"; 
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -22,6 +23,7 @@ app.use("/api", grouptranRoutes);
 app.use("/api", transactionRoutes);
 app.use("/api", accountRoutes);
 app.use("/api", mempayRoutes);
+app.use("/api", languageRoutes);
 
 // Start server
 app.listen(PORT, () => {
