@@ -1,9 +1,9 @@
 import express from "express";
-import { getRequests} from "../controllers/Categories.controller.js";
+import { getRequests} from "../controllers/Orders.controller.js";
 
 const router = express.Router();
 
-router.get("/categories", getRequests);
+router.get("/orders", getRequests);
 // router.post("/account", addRequest);
 // router.delete("/account/:id", deleteRequest);
 // router.put("/account/:id", updateRequest);
